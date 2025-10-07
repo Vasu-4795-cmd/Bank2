@@ -1,0 +1,28 @@
+-- Use the database
+USE bank_app;
+
+-- Drop old table if needed
+-- DROP TABLE IF EXISTS customer;
+
+CREATE TABLE IF NOT EXISTS customer (
+  id INT AUTO_INCREMENT PRIMARY KEY,              -- Internal unique ID
+  name VARCHAR(200) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  phone VARCHAR(15) NOT NULL UNIQUE,
+  address TEXT,
+  account_type ENUM('Savings','Current') NOT NULL DEFAULT 'Savings',
+  pin_hash CHAR(64) NOT NULL,                   -- SHA256 hex digest
+  balance DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  from_acc_no VARCHAR(12),                       -- use account_no for transactions
+  to_acc_no VARCHAR(12),
+  amount DECIMAL(15,2) NOT NULL,
+  ttype ENUM('credit','debit','transfer','deposit','withdraw') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (from_acc_no) REFERENCES customer(account_no) ON DELETE SET NULL,
+  FOREIGN KEY (to_acc_no) REFERENCES customer(account_no) ON DELETE SET NULL
+);
