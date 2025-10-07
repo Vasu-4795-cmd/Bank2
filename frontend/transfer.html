@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>💸 Transfer Money</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function transferMoney(event) {
+      event.preventDefault();
+
+      const fromAcc = document.getElementById("from_acc").value.trim();
+      const pin = document.getElementById("from_pin").value.trim();
+      const toAcc = document.getElementById("to_acc").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (fromAcc === toAcc) {
+        alert("Sender and receiver accounts cannot be the same.");
+        return;
+      }
+
+      let customers = JSON.parse(localStorage.getItem("customers")) || [];
+      const sender = customers.find(c => c.acc_no === fromAcc && c.pin === pin);
+      const receiver = customers.find(c => c.acc_no === toAcc);
+
+      if (!sender) {
+        alert("Invalid sender account number or PIN!");
+        return;
+      }
+      if (!receiver) {
+        alert("Receiver account not found!");
+        return;
+      }
+
+      if (sender.balance < amount) {
+        alert("Insufficient balance in sender account!");
+        return;
+      }
+
+      // Perform transfer
+      sender.balance -= amount;
+      receiver.balance += amount;
+
+      // Update customers in Local Storage
+      localStorage.setItem("customers", JSON.stringify(customers));
+
+      // Save transactions for both accounts
+      let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+      const txnDate = new Date().toLocaleString();
+
+      transactions.push({
+        acc_no: fromAcc,
+        type: "debit",
+        amount: amount,
+        to_acc: toAcc,
+        date: txnDate
+      });
+      transactions.push({
+        acc_no: toAcc,
+        type: "credit",
+        amount: amount,
+        from_acc: fromAcc,
+        date: txnDate
+      });
+
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+
+      alert(`Transfer Successful! ₹${amount} from ${fromAcc} to ${toAcc}.`);
+      window.location.href = "transactions.html";
+    }
+  </script>
+</head>
+<body>
+  <h1>💸 Transfer Money</h1>
+  <form onsubmit="transferMoney(event)">
+    <label>From Account:</label>
+    <input type="text" id="from_acc" required><br>
+
+    <label>Sender PIN:</label>
+    <input type="password" id="from_pin" required maxlength="4"><br>
+
+    <label>To Account:</label>
+    <input type="text" id="to_acc" required><br>
+
+    <label>Amount:</label>
+    <input type="number" id="amount" required><br>
+
+    <button type="submit">✅ Transfer</button>
+  </form>
+</body>
+</html>

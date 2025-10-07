@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Customer</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function saveCustomer(event) {
+      event.preventDefault();
+
+      // Get form values
+      const accNo = document.getElementById("acc_no").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const pin = document.getElementById("pin").value.trim();
+      const balance = document.getElementById("balance").value.trim();
+
+      // Validation: Account number
+      if (!/^[2-9][0-9]{11}$/.test(accNo)) {
+        alert("Account number must be 12 digits, start above 1 (2-9).");
+        return;
+      }
+      const accCounts = {};
+      for (let d of accNo) {
+        accCounts[d] = (accCounts[d] || 0) + 1;
+        if (accCounts[d] > 4) {
+          alert("Account number cannot have any digit repeated more than 4 times.");
+          return;
+        }
+      }
+
+      // Validation: Phone number
+      if (!/^[6-9][0-9]{9}$/.test(phone)) {
+        alert("Phone number must be 10 digits and start with 6,7,8, or 9.");
+        return;
+      }
+      const phoneCounts = {};
+      for (let d of phone) {
+        phoneCounts[d] = (phoneCounts[d] || 0) + 1;
+        if (phoneCounts[d] > 4) {
+          alert("Phone number cannot have any digit repeated more than 4 times.");
+          return;
+        }
+      }
+
+      // Validation: Email must end with @gmail.com
+      if (!email.endsWith("@gmail.com")) {
+        alert("Email must end with @gmail.com.");
+        return;
+      }
+
+      // Validation: PIN
+      if (!/^\d{4}$/.test(pin)) {
+        alert("PIN must be exactly 4 digits.");
+        return;
+      }
+
+      // Fetch existing customers
+      let customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+      // Check duplicates
+      if (customers.some(c => c.acc_no === accNo)) {
+        alert("This Account Number already exists!");
+        return;
+      }
+      if (customers.some(c => c.phone === phone)) {
+        alert("This Phone Number already exists!");
+        return;
+      }
+      if (customers.some(c => c.email === email)) {
+        alert("This Email already exists!");
+        return;
+      }
+      if (customers.some(c => c.pin === pin)) {
+        alert("This PIN is already used by another account!");
+        return;
+      }
+
+      // Add customer
+      const customer = { acc_no: accNo, name, email, phone, address, pin, balance: parseFloat(balance) };
+      customers.push(customer);
+
+      // Save to Local Storage
+      localStorage.setItem("customers", JSON.stringify(customers));
+
+      // Redirect
+      window.location.href = "view_customers.html";
+    }
+  </script>
+</head>
+<body>
+  <h1>➕ Add New Customer</h1>
+  <form onsubmit="saveCustomer(event)">
+    <label>Account No:</label>
+    <input type="text" id="acc_no" required maxlength="12"><br>
+
+    <label>Name:</label>
+    <input type="text" id="name" required><br>
+
+    <label>Email:</label>
+    <input type="email" id="email" required><br>
+
+    <label>Phone:</label>
+    <input type="text" id="phone" required maxlength="10"><br>
+
+    <label>Address:</label>
+    <textarea id="address" required></textarea><br>
+
+    <label>PIN:</label>
+    <input type="password" id="pin" required maxlength="4"><br>
+
+    <label>Initial Balance:</label>
+    <input type="number" id="balance" required><br>
+
+    <button type="submit" class="btn-link">✅ Save Customer</button>
+  </form>
+  <br>
+  <a href="view_customers.html" class="btn-link">👥 View Customers</a>
+</body>
+</html>

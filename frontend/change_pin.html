@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Change PIN</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function changePIN(event) {
+      event.preventDefault();
+
+      const accNo = document.getElementById("acc_no").value.trim();
+      const oldPin = document.getElementById("old_pin").value.trim();
+      const newPin = document.getElementById("new_pin").value.trim();
+
+      let customers = JSON.parse(localStorage.getItem("customers")) || [];
+      const customer = customers.find(c => c.acc_no === accNo && c.pin === oldPin);
+
+      if (!customer) {
+        alert("Invalid Account or Old PIN!");
+        return;
+      }
+
+      if (!/^\d{4}$/.test(newPin)) {
+        alert("New PIN must be exactly 4 digits.");
+        return;
+      }
+
+      customer.pin = newPin;
+      localStorage.setItem("customers", JSON.stringify(customers));
+
+      alert("PIN successfully changed!");
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</head>
+<body>
+  <h1>🔐 Change PIN</h1>
+  <form onsubmit="changePIN(event)">
+    <label>Account No:</label>
+    <input type="text" id="acc_no" required><br>
+
+    <label>Old PIN:</label>
+    <input type="password" id="old_pin" required maxlength="4"><br>
+
+    <label>New PIN:</label>
+    <input type="password" id="new_pin" required maxlength="4"><br>
+
+    <button type="submit">✅ Update PIN</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Customers</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function loadCustomers() {
+      const tbody = document.getElementById("customerTable");
+      const customers = JSON.parse(localStorage.getItem("customers")) || [];
+      tbody.innerHTML = "";
+
+      customers.forEach(cust => {
+        const row = `<tr>
+          <td>${cust.acc_no}</td>
+          <td>${cust.name}</td>
+          <td>${cust.email}</td>
+          <td>${cust.phone}</td>
+          <td>${cust.address}</td>
+          <td>₹${cust.balance}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+    window.onload = loadCustomers;
+  </script>
+</head>
+<body>
+  <h1>👥 All Customers</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Account No</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody id="customerTable"></tbody>
+  </table>
+  <a href="add_customer.html" class="btn-link">➕ Add Another Customer</a>
+</body>
+</html>

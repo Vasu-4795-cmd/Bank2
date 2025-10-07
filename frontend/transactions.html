@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📑 Transaction History</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function loadTransactions() {
+      const tbody = document.getElementById("txnTable");
+      const txns = JSON.parse(localStorage.getItem("transactions")) || [];
+      tbody.innerHTML = "";
+
+      txns.forEach((t, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${t.acc_no}</td>
+          <td>${t.type}</td>
+          <td>₹${t.amount}</td>
+          <td>${t.date}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+    window.onload = loadTransactions;
+  </script>
+</head>
+<body>
+  <h1>📑 Transactions</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Account No</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Date/Time</th>
+      </tr>
+    </thead>
+    <tbody id="txnTable"></tbody>
+  </table>
+  <a href="transfer.html" class="btn-link">💸 New Transaction</a>
+</body>
+</html>

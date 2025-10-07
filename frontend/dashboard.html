@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🏦 Banking Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function exitWebsite() {
+      // Try to close the window/tab
+      window.close();
+
+      // If closing fails (most browsers block it), redirect instead
+      setTimeout(() => {
+        window.location.href = "https://www.google.com"; // You can change this URL
+      }, 500);
+    }
+  </script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Bank Menu</h2>
+    <ul>
+      <li><a href="dashboard.html">🏠 Dashboard</a></li>
+      <li><a href="add_customer.html">➕ Add Customer</a></li>
+      <li><a href="view_customers.html">👥 View Customers</a></li>
+      <li><a href="transfer.html">💸 Transfer</a></li>
+      <li><a href="transactions.html">📑 Transactions</a></li>
+      <li><a href="change_pin.html">🔐 Change PIN</a></li>
+      <li><a href="#" onclick="exitWebsite()">🚪 Exit</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <h1>🏦 Welcome to Your Dashboard</h1>
+    <p>Select any option from the sidebar to start banking.</p>
+    <div>
+      <a href="add_customer.html" class="btn-link">➕ Add Customer</a>
+      <a href="view_customers.html" class="btn-link">👥 View Customers</a>
+      <a href="transfer.html" class="btn-link">💸 Transfer Money</a>
+      <a href="transactions.html" class="btn-link">📑 Transactions</a>
+      <a href="change_pin.html" class="btn-link">🔐 Change PIN</a>
+    </div>
+  </div>
+</body>
+</html>
